@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="panth" translate="label" sortOrder="400">
+            <label>Panth Extensions</label>
+        </tab>
+        <section id="zipcode_validation" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Zipcode Validation</label>
+            <tab>panth</tab>
+            <resource>Panth_ZipcodeValidation::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Zipcode Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Indian PIN code validation on frontend forms</comment>
+                </field>
+                <field id="validate_on_checkout" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable validation on checkout page</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="validate_on_account" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Customer Account</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable validation on customer account address pages</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="validate_on_registration" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Registration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable validation on customer registration</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="error_message" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Error Message</label>
+                    <comment>Custom error message for invalid PIN code</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="show_success_message" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Success Message</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show green success message when PIN code is valid</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="success_message_format" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Success Message Format</label>
+                    <comment>Use {state} placeholder for state name. Example: Valid PIN code for {state}</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="show_success_message">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="display" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display Settings</label>
+                <field id="success_color" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Success Message Color</label>
+                    <comment>Hex color code for success message (e.g., #007a33)</comment>
+                </field>
+                <field id="error_color" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Error Message Color</label>
+                    <comment>Hex color code for error message (e.g., #e02b27)</comment>
+                </field>
+            </group>
+            <group id="pincode_ranges" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>ZIP/PIN Code Ranges</label>
+                <comment><![CDATA[Manage validation ranges via <strong>Panth Infotech > Zipcode Validation > Manage Ranges</strong>. You can add, edit, delete, import, and export ranges from the dedicated grid.]]></comment>
+            </group>
+        </section>
+    </system>
+</config>

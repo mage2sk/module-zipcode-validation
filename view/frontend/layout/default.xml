@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" name="zipcode.validator" template="Panth_ZipcodeValidation::zipcode-validator.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

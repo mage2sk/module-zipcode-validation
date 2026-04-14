@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panth_zipcode_range_listing.panth_zipcode_range_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/edit"/>
+                <class>primary</class>
+                <label translate="true">Add New Range</label>
+            </button>
+            <button name="export">
+                <url path="zipcodevalidation/range/export"/>
+                <class>secondary</class>
+                <label translate="true">Export JSON</label>
+            </button>
+        </buttons>
+        <spinner>panth_zipcode_range_columns</spinner>
+        <deps>
+            <dep>panth_zipcode_range_listing.panth_zipcode_range_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="panth_zipcode_range_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">range_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Panth_ZipcodeValidation::config</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="panth_zipcode_range_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>range_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete selected ranges?</message>
+                        <title translate="true">Delete Ranges</title>
+                    </confirm>
+                    <url path="zipcodevalidation/range/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="panth_zipcode_range_columns">
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>range_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="range_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="country_id" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Country</label>
+            </settings>
+        </column>
+        <column name="state_code" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">State Code</label>
+            </settings>
+        </column>
+        <column name="state_name" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">State/Region Name</label>
+            </settings>
+        </column>
+        <column name="zip_start" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ZIP/PIN Start</label>
+            </settings>
+        </column>
+        <column name="zip_end" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ZIP/PIN End</label>
+            </settings>
+        </column>
+        <column name="is_active" sortOrder="70">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Active</label>
+                <dataType>select</dataType>
+                <options>
+                    <option name="active" xsi:type="array">
+                        <item name="value" xsi:type="string">1</item>
+                        <item name="label" xsi:type="string" translate="true">Yes</item>
+                    </option>
+                    <option name="inactive" xsi:type="array">
+                        <item name="value" xsi:type="string">0</item>
+                        <item name="label" xsi:type="string" translate="true">No</item>
+                    </option>
+                </options>
+            </settings>
+        </column>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" sortOrder="80">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Created</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Panth\ZipcodeValidation\Ui\Component\Listing\Column\RangeActions" sortOrder="100">
+            <settings>
+                <indexField>range_id</indexField>
+                <label translate="true">Actions</label>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

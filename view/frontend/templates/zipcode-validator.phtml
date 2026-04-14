@@ -1,0 +1,19 @@
+<?php
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ */
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Panth_ZipcodeValidation/js/zipcode-validator": {
+            "validationUrl": "<?= $block->escapeUrl($block->getUrl('zipcodevalidation/validate/pincode')) ?>"
+        }
+    }
+}
+</script>

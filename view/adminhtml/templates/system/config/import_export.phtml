@@ -1,0 +1,589 @@
+<?php
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ *
+ * @var $block \Panth\ZipcodeValidation\Block\Adminhtml\System\Config\ImportExport
+ */
+?>
+<div class="zipcode-import-export-container">
+    <div class="zipcode-section-grid">
+        <!-- Import Section -->
+        <div class="zipcode-card zipcode-import-card">
+            <div class="zipcode-card-header">
+                <span class="zipcode-icon zipcode-icon-import">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 3a1 1 0 011 1v5.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414L9 9.586V4a1 1 0 011-1z"/>
+                        <path d="M3 12a1 1 0 011 1v2a1 1 0 001 1h10a1 1 0 001-1v-2a1 1 0 112 0v2a3 3 0 01-3 3H5a3 3 0 01-3-3v-2a1 1 0 011-1z"/>
+                    </svg>
+                </span>
+                <h4><?= $block->escapeHtml(__('Import Validation Ranges')) ?></h4>
+            </div>
+            <div class="zipcode-card-body">
+                <p class="zipcode-description"><?= $block->escapeHtml(__('Upload a JSON file containing validation ranges. All values will be validated before import.')) ?></p>
+
+                <div class="zipcode-file-input-wrapper">
+                    <input type="file" id="zipcode-import-file" accept=".json" class="zipcode-file-input"/>
+                    <label for="zipcode-import-file" class="zipcode-file-label">
+                        <span class="zipcode-file-icon">📁</span>
+                        <span class="zipcode-file-text"><?= $block->escapeHtml(__('Choose JSON file...')) ?></span>
+                    </label>
+                    <span class="zipcode-file-name" id="zipcode-file-name"></span>
+                </div>
+
+                <div class="zipcode-button-group">
+                    <button type="button" id="zipcode-import-btn" class="action-primary zipcode-btn zipcode-btn-primary">
+                        <span><?= $block->escapeHtml(__('Import JSON')) ?></span>
+                    </button>
+                    <button type="button" id="zipcode-sample-btn" class="action-default zipcode-btn zipcode-btn-secondary">
+                        <span><?= $block->escapeHtml(__('Download Sample')) ?></span>
+                    </button>
+                </div>
+
+                <div id="import-result" class="zipcode-result"></div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="zipcode-card zipcode-export-card">
+            <div class="zipcode-card-header">
+                <span class="zipcode-icon zipcode-icon-export">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 17a1 1 0 01-1-1v-5.586l-1.293 1.293a1 1 0 11-1.414-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 10.414V16a1 1 0 01-1 1z"/>
+                        <path d="M3 8a1 1 0 011-1h2a1 1 0 110 2H5a1 1 0 001 1h10a1 1 0 001-1v-1h-1a1 1 0 110-2h2a1 1 0 011 1v2a3 3 0 01-3 3H5a3 3 0 01-3-3V8z"/>
+                    </svg>
+                </span>
+                <h4><?= $block->escapeHtml(__('Export Validation Ranges')) ?></h4>
+            </div>
+            <div class="zipcode-card-body">
+                <p class="zipcode-description"><?= $block->escapeHtml(__('Download current validation ranges as a JSON file. You can edit and re-import this file later.')) ?></p>
+
+                <div class="zipcode-export-info">
+                    <div class="zipcode-info-item">
+                        <span class="zipcode-info-label"><?= $block->escapeHtml(__('Format:')) ?></span>
+                        <span class="zipcode-info-value">JSON</span>
+                    </div>
+                    <div class="zipcode-info-item">
+                        <span class="zipcode-info-label"><?= $block->escapeHtml(__('Includes:')) ?></span>
+                        <span class="zipcode-info-value"><?= $block->escapeHtml(__('All configured ranges')) ?></span>
+                    </div>
+                </div>
+
+                <button type="button" id="zipcode-export-btn" class="action-primary zipcode-btn zipcode-btn-success">
+                    <span><?= $block->escapeHtml(__('Export Current Ranges')) ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="zipcode-help-section">
+        <div class="zipcode-help-header">
+            <span class="zipcode-help-icon">ℹ️</span>
+            <strong><?= $block->escapeHtml(__('JSON Format Instructions')) ?></strong>
+        </div>
+        <div class="zipcode-help-content">
+            <p><?= $block->escapeHtml(__('Your JSON file should contain an array of objects with the following fields:')) ?></p>
+            <ul class="zipcode-help-list">
+                <li><code>country_id</code> - <?= $block->escapeHtml(__('2-letter country code (e.g., IN, US, GB)')) ?></li>
+                <li><code>state_code</code> - <?= $block->escapeHtml(__('State/region code (optional)')) ?></li>
+                <li><code>state_name</code> - <?= $block->escapeHtml(__('State/region name (required)')) ?></li>
+                <li><code>pincode_start</code> - <?= $block->escapeHtml(__('Starting ZIP/PIN code (numeric)')) ?></li>
+                <li><code>pincode_end</code> - <?= $block->escapeHtml(__('Ending ZIP/PIN code (numeric)')) ?></li>
+            </ul>
+            <p class="zipcode-help-tip">
+                <strong><?= $block->escapeHtml(__('Tip:')) ?></strong>
+                <?= $block->escapeHtml(__('Click "Download Sample" to see the correct format.')) ?>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+require([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'mage/translate',
+    'domReady!'
+], function ($, alert, $t) {
+    'use strict';
+
+    var importUrl = '<?= $block->escapeUrl($block->getImportUrl()) ?>';
+    var exportUrl = '<?= $block->escapeUrl($block->getExportUrl()) ?>';
+    var sampleUrl = '<?= $block->escapeUrl($block->getSampleUrl()) ?>';
+
+    // File input - show selected filename
+    $('#zipcode-import-file').on('change', function() {
+        var fileName = $(this).val().split('\\').pop();
+        if (fileName) {
+            $('#zipcode-file-name').text(fileName).show();
+            $('.zipcode-file-text').text($t('File selected:'));
+        } else {
+            $('#zipcode-file-name').text('').hide();
+            $('.zipcode-file-text').text($t('Choose JSON file...'));
+        }
+    });
+
+    // Export functionality
+    $('#zipcode-export-btn').on('click', function() {
+        window.location.href = exportUrl;
+    });
+
+    // Download sample functionality
+    $('#zipcode-sample-btn').on('click', function() {
+        window.location.href = sampleUrl;
+    });
+
+    // Import functionality
+    $('#zipcode-import-btn').on('click', function() {
+        var fileInput = document.getElementById('zipcode-import-file');
+        var resultDiv = $('#import-result');
+
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert({
+                title: $t('Error'),
+                content: $t('Please select a JSON file to import.')
+            });
+            return;
+        }
+
+        var file = fileInput.files[0];
+
+        // Check file extension
+        if (!file.name.endsWith('.json')) {
+            alert({
+                title: $t('Error'),
+                content: $t('Please select a valid JSON file.')
+            });
+            return;
+        }
+
+        // Read file
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var jsonData = e.target.result;
+
+                // Validate JSON
+                try {
+                    JSON.parse(jsonData);
+                } catch (parseError) {
+                    alert({
+                        title: $t('Error'),
+                        content: $t('Invalid JSON format: ') + parseError.message
+                    });
+                    return;
+                }
+
+                // Show loading
+                resultDiv.html('<div class="message message-notice"><span>' + $t('Importing and validating...') + '</span></div>');
+
+                // Send AJAX request
+                $.ajax({
+                    url: importUrl,
+                    type: 'POST',
+                    data: {
+                        json_data: jsonData,
+                        form_key: window.FORM_KEY
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            resultDiv.html(
+                                '<div class="message message-success success"><span>' +
+                                response.message +
+                                '</span></div>'
+                            );
+
+                            // Clear file input
+                            fileInput.value = '';
+
+                            // Reload page after 2 seconds to show new data
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            var errorHtml = '<div class="message message-error error"><span>' +
+                                response.message +
+                                '</span>';
+
+                            if (response.errors && response.errors.length > 0) {
+                                errorHtml += '<ul style="margin-top: 10px;">';
+                                response.errors.forEach(function(error) {
+                                    errorHtml += '<li>' + error + '</li>';
+                                });
+                                errorHtml += '</ul>';
+                            }
+
+                            errorHtml += '</div>';
+                            resultDiv.html(errorHtml);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        resultDiv.html(
+                            '<div class="message message-error error"><span>' +
+                            $t('Error during import: ') + error +
+                            '</span></div>'
+                        );
+                    }
+                });
+
+            } catch (error) {
+                alert({
+                    title: $t('Error'),
+                    content: $t('Error reading file: ') + error.message
+                });
+            }
+        };
+
+        reader.readAsText(file);
+    });
+});
+</script>
+
+<style>
+/* Container */
+.zipcode-import-export-container {
+    padding: 0;
+    margin: 20px 0;
+}
+
+/* Grid Layout */
+.zipcode-section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Cards */
+.zipcode-card {
+    background: #ffffff;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.zipcode-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Header */
+.zipcode-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+    color: white;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.zipcode-export-card .zipcode-card-header {
+    background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+}
+
+.zipcode-card-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+.zipcode-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: white;
+}
+
+/* Card Body */
+.zipcode-card-body {
+    padding: 20px;
+}
+
+.zipcode-description {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+}
+
+/* File Input */
+.zipcode-file-input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.zipcode-file-input {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+.zipcode-file-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border: 2px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.zipcode-file-label:hover {
+    background: #e9ecef;
+    border-color: #667eea;
+}
+
+.zipcode-file-icon {
+    font-size: 20px;
+}
+
+.zipcode-file-name {
+    display: none;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* Button Group */
+.zipcode-button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+.zipcode-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zipcode-btn-primary {
+    background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+    color: white;
+}
+
+.zipcode-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.zipcode-btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.zipcode-btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+.zipcode-btn-success {
+    background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+    color: white;
+}
+
+.zipcode-btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+}
+
+/* Export Info */
+.zipcode-export-info {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.zipcode-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.zipcode-info-item:not(:last-child) {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.zipcode-info-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.zipcode-info-value {
+    font-size: 13px;
+    color: #1f2937;
+    font-weight: 600;
+    background: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+/* Result Messages */
+.zipcode-result {
+    margin-top: 15px;
+}
+
+.zipcode-result .message {
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.zipcode-result .message-success {
+    background: #ecfdf5;
+    border-color: #059669;
+    color: #065f46;
+}
+
+.zipcode-result .message-error {
+    background: #fef2f2;
+    border-color: #dc2626;
+    color: #991b1b;
+}
+
+.zipcode-result .message-notice {
+    background: #fffbeb;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+.zipcode-result .message ul {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+.zipcode-result .message li {
+    margin: 5px 0;
+}
+
+/* Help Section */
+.zipcode-help-section {
+    background: white;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.zipcode-help-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: #1f2937;
+}
+
+.zipcode-help-icon {
+    font-size: 20px;
+}
+
+.zipcode-help-content {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.zipcode-help-content p {
+    margin: 10px 0;
+}
+
+.zipcode-help-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.zipcode-help-list li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+}
+
+.zipcode-help-list li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.zipcode-help-list code {
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.zipcode-help-tip {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.zipcode-help-tip strong {
+    color: #1e40af;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .zipcode-section-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .zipcode-button-group {
+        flex-direction: column;
+    }
+
+    .zipcode-btn {
+        width: 100%;
+    }
+}
+</style>
