@@ -2,7 +2,7 @@
     "name": "mage2kishan/module-zipcode-validation",
     "description": "Panth ZipcodeValidation — validates ZIP/PIN codes at checkout against configurable country-specific ranges. Ships with pre-loaded ranges for India, US, UK, Canada, Australia, and Europe. Includes admin grid for managing ranges, CSV/JSON import-export, and real-time AJAX validation on the storefront.",
     "type": "magento2-module",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "proprietary",
     "keywords": [
         "magento2",
