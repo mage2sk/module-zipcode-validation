@@ -4,6 +4,16 @@ All notable changes to this extension are documented here. The format
 is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.4] - 2026-06-18
+
+### Changed
+- Rewrote README to document only real system.xml settings and actual
+  code features; removed inaccurate claims about Hyva support, allow/
+  block-list mode config, and settings that do not exist in system.xml.
+- Canonical URL updated to product page.
+
+---
+
 ## [1.0.0] -- Initial release
 
 ### Added
