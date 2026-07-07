@@ -1,13 +1,4 @@
 <?php
-/**
- * Panth_ZipcodeValidation
- *
- * @category  Panth
- * @package   Panth_ZipcodeValidation
- * @author    Panth
- * @copyright Copyright (c) 2025 Panth
- */
-
 namespace Panth\ZipcodeValidation\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -17,28 +8,12 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 class AddIndianPincodeRanges implements DataPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
     private $moduleDataSetup;
 
-    /**
-     * @var WriterInterface
-     */
     private $configWriter;
 
-    /**
-     * @var Json
-     */
     private $serializer;
 
-    /**
-     * Constructor
-     *
-     * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param WriterInterface $configWriter
-     * @param Json $serializer
-     */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
         WriterInterface $configWriter,
@@ -49,14 +24,10 @@ class AddIndianPincodeRanges implements DataPatchInterface
         $this->serializer = $serializer;
     }
 
-    /**
-     * Apply patch
-     */
     public function apply()
     {
         $this->moduleDataSetup->startSetup();
 
-        // Define Indian PIN code ranges for all 38 states and union territories
         $indianRanges = [
             ['country_id' => 'IN', 'state_code' => 'AN', 'state_name' => 'Andaman and Nicobar Islands', 'pincode_start' => '744101', 'pincode_end' => '744301'],
             ['country_id' => 'IN', 'state_code' => 'AP', 'state_name' => 'Andhra Pradesh', 'pincode_start' => '515001', 'pincode_end' => '535594'],
@@ -97,7 +68,6 @@ class AddIndianPincodeRanges implements DataPatchInterface
             ['country_id' => 'IN', 'state_code' => 'WB', 'state_name' => 'West Bengal', 'pincode_start' => '700001', 'pincode_end' => '743711']
         ];
 
-        // Serialize and save to configuration
         $serializedData = $this->serializer->serialize($indianRanges);
 
         $this->configWriter->save(
@@ -108,17 +78,11 @@ class AddIndianPincodeRanges implements DataPatchInterface
         $this->moduleDataSetup->endSetup();
     }
 
-    /**
-     * Get aliases
-     */
     public function getAliases()
     {
         return [];
     }
 
-    /**
-     * Get dependencies
-     */
     public static function getDependencies()
     {
         return [];

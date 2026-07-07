@@ -1,16 +1,4 @@
 <?php
-/**
- * Panth_ZipcodeValidation
- *
- * Dynamic rows field for managing PIN/ZIP code validation ranges
- * Includes custom pagination (10 rows per page)
- *
- * @category  Panth
- * @package   Panth_ZipcodeValidation
- * @author    Panth
- * @copyright Copyright (c) 2025 Panth
- */
-
 namespace Panth\ZipcodeValidation\Block\Adminhtml\System\Config\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
@@ -20,26 +8,12 @@ use Panth\ZipcodeValidation\Block\Adminhtml\System\Config\Form\Field\Column\Coun
 
 class PincodeRanges extends AbstractFieldArray
 {
-    /**
-     * @var CountryColumn
-     */
     protected $countryRenderer;
 
-    /**
-     * Rows per page for pagination
-     */
     const ROWS_PER_PAGE = 10;
 
-    /**
-     * Prefix for row IDs to ensure valid CSS selectors
-     *
-     * @var string
-     */
     protected $_idPrefix = 'row_';
 
-    /**
-     * Prepare rendering the new field by adding all the needed columns
-     */
     protected function _prepareToRender()
     {
         $this->addColumn('country_id', [
@@ -72,28 +46,15 @@ class PincodeRanges extends AbstractFieldArray
         $this->_addButtonLabel = __('Add Range');
     }
 
-    /**
-     * Get unique row ID with prefix
-     *
-     * @param int $rowId
-     * @return string
-     */
     protected function _getRowId($rowId)
     {
         return $this->_idPrefix . $rowId;
     }
 
-    /**
-     * Get array rows - Override to prefix all row IDs
-     * This is critical to fix the CSS selector error in the JavaScript template
-     *
-     * @return array
-     */
     public function getArrayRows()
     {
         $rows = parent::getArrayRows();
 
-        // Prefix all numeric row IDs to ensure valid CSS selectors
         foreach ($rows as $rowId => $row) {
             $currentId = $row->getData('_id');
             if ($currentId !== null && is_numeric($currentId)) {
@@ -104,13 +65,6 @@ class PincodeRanges extends AbstractFieldArray
         return $rows;
     }
 
-    /**
-     * Render array row
-     * Override to fix row ID to include prefix
-     *
-     * @param DataObject $row
-     * @return string
-     */
     protected function _renderRow(DataObject $row)
     {
         $rowId = $row->getData('_id');
@@ -120,12 +74,6 @@ class PincodeRanges extends AbstractFieldArray
         return parent::_renderRow($row);
     }
 
-    /**
-     * Prepare existing row data object
-     *
-     * @param DataObject $row
-     * @throws LocalizedException
-     */
     protected function _prepareArrayRow(DataObject $row): void
     {
         $options = [];
@@ -138,12 +86,6 @@ class PincodeRanges extends AbstractFieldArray
         $row->setData('option_extra_attrs', $options);
     }
 
-    /**
-     * Get country column renderer
-     *
-     * @return CountryColumn
-     * @throws LocalizedException
-     */
     protected function getCountryRenderer()
     {
         if (!$this->countryRenderer) {
@@ -157,39 +99,22 @@ class PincodeRanges extends AbstractFieldArray
         return $this->countryRenderer;
     }
 
-    /**
-     * Render array cell for prototypeJS template and fix numeric row IDs
-     *
-     * @param string $columnName
-     * @return string
-     * @throws \Exception
-     */
     protected function _toHtml()
     {
         $html = parent::_toHtml();
 
-        // Fix numeric row IDs to prevent CSS selector errors
-        // This is critical: CSS selectors cannot start with digits
-
-        // Pattern 1: Fix tr id attributes: id="0" -> id="row_0"
         $html = preg_replace('/\sid="(\d+)"/', ' id="row_$1"', $html);
         $html = preg_replace("/\sid='(\d+)'/", " id='row_\$1'", $html);
 
-        // Pattern 2: Fix tr# in JavaScript selectors: 'tr#0' -> 'tr#row_0'
         $html = preg_replace('/(tr#)(\d+)/', '$1row_$2', $html);
 
-        // Pattern 3: Fix ID selectors in quotes: '#0' -> '#row_0'
         $html = preg_replace('/(["\'])#(\d+)(["\'])/', '$1#row_$2$3', $html);
 
-        // Pattern 4: Fix template variables: <%- _id %> usage in selectors
-        // Replace patterns like 'tr#<%- _id %>' with 'tr#row_<%- _id %>'
         $html = preg_replace('/(tr#)(<%[-=]\s*_id\s*%>)/', '$1row_$2', $html);
         $html = preg_replace('/(["\'])#(<%[-=]\s*_id\s*%>)/', '$1#row_$2', $html);
 
-        // Pattern 5: Fix any remaining #digit patterns in JavaScript context
         $html = preg_replace('/(["\'\(])#(\d+)(["\'\)])/', '$1#row_$2$3', $html);
 
-        // Add pagination controls and JavaScript
         $elementId = $this->getElement()->getId();
         $rowsPerPage = self::ROWS_PER_PAGE;
 

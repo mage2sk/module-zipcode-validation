@@ -21,7 +21,6 @@ class AddGlobalZipcodeRanges implements DataPatchInterface
         $connection = $this->moduleDataSetup->getConnection();
         $table = $this->moduleDataSetup->getTable('panth_zipcode_range');
 
-        // Skip if table already has data
         if ((int) $connection->fetchOne("SELECT COUNT(*) FROM {$table}") > 0) {
             $this->moduleDataSetup->endSetup();
             return $this;

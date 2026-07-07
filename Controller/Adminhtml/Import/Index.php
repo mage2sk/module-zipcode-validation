@@ -1,13 +1,4 @@
 <?php
-/**
- * Panth_ZipcodeValidation
- *
- * @category  Panth
- * @package   Panth_ZipcodeValidation
- * @author    Panth
- * @copyright Copyright (c) 2025 Panth
- */
-
 namespace Panth\ZipcodeValidation\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action;
@@ -19,40 +10,16 @@ use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCo
 
 class Index extends Action
 {
-    /**
-     * Authorization level
-     */
     const ADMIN_RESOURCE = 'Panth_ZipcodeValidation::config';
 
-    /**
-     * @var JsonFactory
-     */
     protected $resultJsonFactory;
 
-    /**
-     * @var WriterInterface
-     */
     protected $configWriter;
 
-    /**
-     * @var Json
-     */
     protected $serializer;
 
-    /**
-     * @var CountryCollectionFactory
-     */
     protected $countryCollectionFactory;
 
-    /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param JsonFactory $resultJsonFactory
-     * @param WriterInterface $configWriter
-     * @param Json $serializer
-     * @param CountryCollectionFactory $countryCollectionFactory
-     */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
@@ -67,11 +34,6 @@ class Index extends Action
         parent::__construct($context);
     }
 
-    /**
-     * Execute import
-     *
-     * @return \Magento\Framework\Controller\Result\Json
-     */
     public function execute()
     {
         $result = $this->resultJsonFactory->create();
@@ -86,7 +48,6 @@ class Index extends Action
                 ]);
             }
 
-            // Decode JSON
             $data = $this->serializer->unserialize($jsonData);
 
             if (!is_array($data)) {
@@ -96,7 +57,6 @@ class Index extends Action
                 ]);
             }
 
-            // Validate data
             $validationResult = $this->validateImportData($data);
 
             if (!$validationResult['valid']) {
@@ -107,7 +67,6 @@ class Index extends Action
                 ]);
             }
 
-            // Save to configuration
             $serializedData = $this->serializer->serialize($data);
             $this->configWriter->save(
                 'zipcode_validation/pincode_ranges/custom_ranges',
@@ -119,7 +78,6 @@ class Index extends Action
                 'message' => __('Successfully imported %1 validation ranges.', count($data)),
                 'count' => count($data)
             ]);
-
         } catch (\Exception $e) {
             return $result->setData([
                 'success' => false,
@@ -128,12 +86,6 @@ class Index extends Action
         }
     }
 
-    /**
-     * Validate import data
-     *
-     * @param array $data
-     * @return array
-     */
     protected function validateImportData($data)
     {
         $errors = [];
@@ -142,7 +94,6 @@ class Index extends Action
         foreach ($data as $index => $range) {
             $rowNumber = $index + 1;
 
-            // Validate required fields
             if (empty($range['country_id'])) {
                 $errors[] = __('Row %1: Country ID is required.', $rowNumber);
             } elseif (!in_array($range['country_id'], $validCountries)) {
@@ -165,7 +116,6 @@ class Index extends Action
                 $errors[] = __('Row %1: PIN/ZIP end must be numeric.', $rowNumber);
             }
 
-            // Validate range
             if (isset($range['pincode_start']) && isset($range['pincode_end'])) {
                 if ((int)$range['pincode_start'] > (int)$range['pincode_end']) {
                     $errors[] = __('Row %1: PIN/ZIP start cannot be greater than end.', $rowNumber);
@@ -184,11 +134,6 @@ class Index extends Action
         return ['valid' => true];
     }
 
-    /**
-     * Get valid country codes
-     *
-     * @return array
-     */
     protected function getValidCountries()
     {
         $countries = [];

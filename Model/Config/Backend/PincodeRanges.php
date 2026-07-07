@@ -1,13 +1,4 @@
 <?php
-/**
- * Panth_ZipcodeValidation
- *
- * @category  Panth
- * @package   Panth_ZipcodeValidation
- * @author    Panth
- * @copyright Copyright (c) 2025 Panth
- */
-
 namespace Panth\ZipcodeValidation\Model\Config\Backend;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -21,23 +12,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 class PincodeRanges extends Value
 {
-    /**
-     * @var Json
-     */
     protected $serializer;
 
-    /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param Registry $registry
-     * @param ScopeConfigInterface $config
-     * @param TypeListInterface $cacheTypeList
-     * @param Json $serializer
-     * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
-     */
     public function __construct(
         Context $context,
         Registry $registry,
@@ -52,17 +28,11 @@ class PincodeRanges extends Value
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
-    /**
-     * Before save processing
-     *
-     * @return $this
-     */
     public function beforeSave()
     {
         $value = $this->getValue();
 
         if (is_array($value)) {
-            // Remove empty rows
             $value = array_filter($value, function($row) {
                 return !empty($row['country_id']) ||
                        !empty($row['state_code']) ||
@@ -70,21 +40,14 @@ class PincodeRanges extends Value
                        !empty($row['pincode_end']);
             });
 
-            // Reset array keys
             $value = array_values($value);
 
-            // Serialize the array
             $this->setValue($this->serializer->serialize($value));
         }
 
         return parent::beforeSave();
     }
 
-    /**
-     * After load processing
-     *
-     * @return $this
-     */
     protected function _afterLoad()
     {
         $value = $this->getValue();

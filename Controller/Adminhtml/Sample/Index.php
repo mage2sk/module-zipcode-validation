@@ -1,13 +1,4 @@
 <?php
-/**
- * Panth_ZipcodeValidation
- *
- * @category  Panth
- * @package   Panth_ZipcodeValidation
- * @author    Panth
- * @copyright Copyright (c) 2025 Panth
- */
-
 namespace Panth\ZipcodeValidation\Controller\Adminhtml\Sample;
 
 use Magento\Backend\App\Action;
@@ -18,23 +9,10 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 class Index extends Action
 {
-    /**
-     * @var FileFactory
-     */
     protected $fileFactory;
 
-    /**
-     * @var Json
-     */
     protected $serializer;
 
-    /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param FileFactory $fileFactory
-     * @param Json $serializer
-     */
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
@@ -45,15 +23,9 @@ class Index extends Action
         $this->serializer = $serializer;
     }
 
-    /**
-     * Download sample JSON file
-     *
-     * @return \Magento\Framework\App\ResponseInterface
-     */
     public function execute()
     {
         try {
-            // Sample data with various countries
             $sampleData = [
                 [
                     'country_id' => 'IN',
@@ -108,18 +80,12 @@ class Index extends Action
                 DirectoryList::VAR_DIR,
                 'application/json'
             );
-
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Error generating sample file: %1', $e->getMessage()));
             return $this->_redirect('adminhtml/system_config/edit/section/zipcode_validation');
         }
     }
 
-    /**
-     * Check ACL permissions
-     *
-     * @return bool
-     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Panth_ZipcodeValidation::config');

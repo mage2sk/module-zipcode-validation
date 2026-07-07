@@ -37,7 +37,6 @@ class RangeDataProvider extends AbstractDataProvider
             $this->loadedData[$item->getId()] = $item->getData();
         }
 
-        // For new items, return empty
         $id = $this->request->getParam('id');
         if ($id && !isset($this->loadedData[$id])) {
             $this->loadedData[$id] = [];

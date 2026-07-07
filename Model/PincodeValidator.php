@@ -20,9 +20,6 @@ class PincodeValidator
         $this->collectionFactory = $collectionFactory;
     }
 
-    /**
-     * Load active ranges from DB table
-     */
     private function loadRanges(string $countryId = ''): array
     {
         $cacheKey = $countryId ?: '__all__';
@@ -54,9 +51,6 @@ class PincodeValidator
         return $ranges;
     }
 
-    /**
-     * Get region code from region ID
-     */
     private function getRegionCode($regionId): ?string
     {
         if (empty($regionId)) {
@@ -71,14 +65,10 @@ class PincodeValidator
                 return strtoupper($region->getCode());
             }
         } catch (\Exception $e) {
-            // ignore
         }
         return null;
     }
 
-    /**
-     * Validate a ZIP/PIN code
-     */
     public function validate(string $pincode, ?string $regionId = null, string $countryId = 'IN'): array
     {
         $pincode = preg_replace('/[^0-9a-zA-Z]/', '', $pincode);
@@ -87,7 +77,6 @@ class PincodeValidator
             return ['valid' => false, 'message' => 'Please enter your postal/ZIP code.'];
         }
 
-        // For India: must be 6 digits, first digit 1-9
         if ($countryId === 'IN' && !preg_match('/^[1-9][0-9]{5}$/', $pincode)) {
             return ['valid' => false, 'message' => 'Indian PIN codes must be 6 digits (e.g. 110001).'];
         }
@@ -95,11 +84,9 @@ class PincodeValidator
         $ranges = $this->loadRanges($countryId);
 
         if (empty($ranges)) {
-            // No ranges configured for this country — skip validation
             return ['valid' => true, 'message' => '', 'state' => ''];
         }
 
-        // Find matching ranges
         $matchingStates = [];
         foreach ($ranges as $data) {
             if ($this->isInRange($pincode, $data['pincode_start'], $data['pincode_end'])) {
@@ -111,7 +98,6 @@ class PincodeValidator
             return ['valid' => false, 'message' => 'We couldn\'t verify this postal code. Please double-check and try again.'];
         }
 
-        // Validate against selected state/region if provided
         if ($regionId !== null && $regionId !== '') {
             $regionCode = $this->getRegionCode($regionId);
             if ($regionCode) {
@@ -135,9 +121,6 @@ class PincodeValidator
         return ['valid' => true, 'message' => '', 'state' => $matchingStates[0]['state_name']];
     }
 
-    /**
-     * Check if a code falls within a range (numeric or string comparison)
-     */
     private function isInRange(string $code, string $start, string $end): bool
     {
         if (is_numeric($code) && is_numeric($start) && is_numeric($end)) {
@@ -146,9 +129,6 @@ class PincodeValidator
         return strcasecmp($code, $start) >= 0 && strcasecmp($code, $end) <= 0;
     }
 
-    /**
-     * Get state by pincode
-     */
     public function getStateByPincode(string $pincode, string $countryId = 'IN'): ?string
     {
         $result = $this->validate($pincode, null, $countryId);
