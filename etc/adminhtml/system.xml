@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="panth" translate="label" sortOrder="400">
+            <label>Panth Extensions</label>
+        </tab>
+        <section id="zipcode_validation" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Zipcode Validation</label>
+            <tab>panth</tab>
+            <resource>Panth_ZipcodeValidation::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Zipcode Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable postcode validation on frontend forms. Ranges are global: they apply to every website and store view.</comment>
+                </field>
+                <field id="enforce_on_order" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enforce on Shipping Information and Order Placement</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[When Yes, the server rejects saving shipping information and placing an order (storefront, REST and GraphQL) when the shipping postcode is outside the active ranges of its country. Countries without ranges are not checked. Test before enabling: incomplete ranges will block orders. Default: No.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="validate_on_checkout" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show inline validation on the Luma checkout and cart pages</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="validate_on_account" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Customer Account</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show inline validation on the Luma customer address add/edit pages</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="validate_on_registration" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Validate on Registration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show inline validation on the Luma customer registration page</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="error_message" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Error Message</label>
+                    <comment>Message returned when a postcode is outside every active range of its country</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="show_success_message" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Success Message</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show green success message when PIN code is valid</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="success_message_format" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Success Message Format</label>
+                    <comment>Use {state} placeholder for state name. Example: Valid PIN code for {state}</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="show_success_message">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="security" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Abuse Protection</label>
+                <comment><![CDATA[Limits how often one client IP address can call the storefront postcode check endpoint. The client IP is taken from Magento's remote address, which honours the trusted proxy headers configured in app/etc/env.php.]]></comment>
+                <field id="rate_limit" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Requests per Window</label>
+                    <validate>validate-digits</validate>
+                    <comment>Maximum check requests allowed per IP address in one window. Further requests get HTTP 429 and are not validated. Set to 0 to disable. Default: 60.</comment>
+                </field>
+                <field id="rate_limit_window" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Window Length (seconds)</label>
+                    <validate>validate-digits</validate>
+                    <comment>Length of the rate limit window in seconds. Default: 300.</comment>
+                </field>
+            </group>
+            <group id="display" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display Settings</label>
+                <field id="success_color" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Success Message Color</label>
+                    <comment>Hex color code for the success message of the Luma account and registration forms (e.g., #007a33)</comment>
+                </field>
+                <field id="error_color" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Error Message Color</label>
+                    <comment>Hex color code for the error message of the Luma account and registration forms (e.g., #e02b27)</comment>
+                </field>
+            </group>
+            <group id="pincode_ranges" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>ZIP/PIN Code Ranges</label>
+                <comment><![CDATA[Manage validation ranges via <strong>Panth Infotech > Zipcode Validation > Manage Ranges</strong>. You can add, edit, delete, import, and export ranges from the dedicated grid. Ranges are global and apply to all websites and store views.]]></comment>
+            </group>
+        </section>
+    </system>
+</config>

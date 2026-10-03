@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="panth_zipcode_range_listing_data_source" xsi:type="string">Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="panth_zipcode_validation_enforce_shipping_information"
+                type="Panth\ZipcodeValidation\Plugin\ShippingInformationPlugin"/>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="panth_zipcode_validation_enforce_submit"
+                type="Panth\ZipcodeValidation\Plugin\QuoteSubmitPlugin"/>
+    </type>
+    <virtualType name="Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panth_zipcode_range</argument>
+            <argument name="resourceModel" xsi:type="string">Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange</argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="panth_zipcode_range" resource="default" engine="innodb" comment="Panth Zipcode Validation Ranges">
+        <column xsi:type="int" name="range_id" unsigned="true" nullable="false" identity="true" comment="Range ID"/>
+        <column xsi:type="varchar" name="country_id" nullable="false" length="2" comment="Country Code"/>
+        <column xsi:type="varchar" name="state_code" nullable="true" length="10" comment="State/Region Code"/>
+        <column xsi:type="varchar" name="state_name" nullable="false" length="255" comment="State/Region Name"/>
+        <column xsi:type="varchar" name="zip_start" nullable="false" length="20" comment="ZIP/PIN Start"/>
+        <column xsi:type="varchar" name="zip_end" nullable="false" length="20" comment="ZIP/PIN End"/>
+        <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" default="1" comment="Is Active"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="range_id"/>
+        </constraint>
+        <index referenceId="PANTH_ZIPCODE_RANGE_COUNTRY_ID" indexType="btree">
+            <column name="country_id"/>
+        </index>
+        <index referenceId="PANTH_ZIPCODE_RANGE_IS_ACTIVE" indexType="btree">
+            <column name="is_active"/>
+        </index>
+    </table>
+</schema>

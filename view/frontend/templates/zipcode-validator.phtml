@@ -1,0 +1,23 @@
+<?php
+/**
+ * Panth_ZipcodeValidation
+ *
+ * @category  Panth
+ * @package   Panth_ZipcodeValidation
+ * @author    Panth
+ * @copyright Copyright (c) 2025 Panth
+ */
+
+$viewModel = $block->getData('view_model');
+if (!$viewModel instanceof \Panth\ZipcodeValidation\ViewModel\FrontendConfig || !$viewModel->isActiveOnPage()) {
+    return;
+}
+$jsConfig = [
+    '*' => [
+        'Panth_ZipcodeValidation/js/zipcode-validator' => $viewModel->getJsConfig(),
+    ],
+];
+?>
+<script type="text/x-magento-init">
+<?= /* @noEscape */ json_encode($jsConfig, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES) ?>
+</script>
