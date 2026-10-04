@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panth_zipcode_range_form.panth_zipcode_range_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Range Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Panth\ZipcodeValidation\Block\Adminhtml\Range\Edit\BackButton"/>
+            <button name="delete" class="Panth\ZipcodeValidation\Block\Adminhtml\Range\Edit\DeleteButton"/>
+            <button name="save_and_continue" class="Panth\ZipcodeValidation\Block\Adminhtml\Range\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Panth\ZipcodeValidation\Block\Adminhtml\Range\Edit\SaveButton"/>
+        </buttons>
+        <namespace>panth_zipcode_range_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>panth_zipcode_range_form.panth_zipcode_range_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="panth_zipcode_range_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="zipcodevalidation/range/save"/>
+        </settings>
+        <dataProvider class="Panth\ZipcodeValidation\Ui\DataProvider\RangeDataProvider"
+                      name="panth_zipcode_range_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>range_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">Range Details</label>
+        </settings>
+        <field name="range_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="country_id" formElement="select">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Country</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Directory\Model\Config\Source\Country"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="state_code" formElement="input">
+            <settings>
+                <notice translate="true">Magento region code of the area, for example NY or MH. When a customer picks a region, the code must match it. Leave empty for countries without regions or to accept any region.</notice>
+                <dataType>text</dataType>
+                <label translate="true">State/Region Code</label>
+            </settings>
+        </field>
+        <field name="state_name" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">State/Region Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="zip_start" formElement="input">
+            <settings>
+                <notice translate="true">First code of the range. Spaces and dashes are ignored. Use the same length as ZIP/PIN End, for example 10001, 110001, M1A for Canada or an outward code such as W1 for the UK.</notice>
+                <dataType>text</dataType>
+                <label translate="true">ZIP/PIN Start</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="zip_end" formElement="input">
+            <settings>
+                <notice translate="true">Last code of the range, inclusive. Digit codes are compared as numbers, other codes in natural order (W2 comes before W14).</notice>
+                <dataType>text</dataType>
+                <label translate="true">ZIP/PIN End</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="is_active" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Active</label>
+                <notice translate="true">Inactive ranges are kept but ignored by the storefront check and the order enforcement.</notice>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

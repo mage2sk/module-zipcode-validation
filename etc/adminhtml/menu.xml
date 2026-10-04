@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Panth_ZipcodeValidation::group"
+             title="Zipcode Validation"
+             module="Panth_ZipcodeValidation"
+             sortOrder="85"
+             parent="Panth_Core::panth_extensions"
+             resource="Panth_ZipcodeValidation::config"/>
+        <add id="Panth_ZipcodeValidation::manage_ranges"
+             title="Manage Ranges"
+             module="Panth_ZipcodeValidation"
+             sortOrder="10"
+             parent="Panth_ZipcodeValidation::group"
+             action="zipcodevalidation/range/index"
+             resource="Panth_ZipcodeValidation::config"/>
+        <add id="Panth_ZipcodeValidation::config"
+             title="Configuration"
+             module="Panth_ZipcodeValidation"
+             sortOrder="20"
+             parent="Panth_ZipcodeValidation::group"
+             action="adminhtml/system_config/edit/section/zipcode_validation"
+             resource="Panth_ZipcodeValidation::config"/>
+    </menu>
+</config>

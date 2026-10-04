@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="panth_zipcode_range_listing_data_source" xsi:type="string">Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="panth_zipcode_validation_enforce_shipping_information"
+                type="Panth\ZipcodeValidation\Plugin\ShippingInformationPlugin"/>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="panth_zipcode_validation_enforce_submit"
+                type="Panth\ZipcodeValidation\Plugin\QuoteSubmitPlugin"/>
+    </type>
+    <virtualType name="Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panth_zipcode_range</argument>
+            <argument name="resourceModel" xsi:type="string">Panth\ZipcodeValidation\Model\ResourceModel\ZipcodeRange</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\ZipcodeValidation\Ui\DataProvider\RangeFilterPool"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Panth\ZipcodeValidation\Ui\DataProvider\RangeFulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\ZipcodeValidation\Ui\DataProvider\RangeReporting"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="filterPool" xsi:type="object">Panth\ZipcodeValidation\Ui\DataProvider\RangeFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Panth\ZipcodeValidation\Ui\DataProvider\RangeListingDataProvider"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object">Panth\ZipcodeValidation\Ui\DataProvider\RangeReporting</argument>
+        </arguments>
+    </virtualType>
+</config>
